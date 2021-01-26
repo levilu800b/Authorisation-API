@@ -5,6 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const { ObjectId } = require('mongodb');
+const { v4: uuidv4 } = require('uuid');
 
 const mongoose = require('mongoose');
 const { Ad } = require('../models/ad');
@@ -34,12 +35,15 @@ app.post('/auth', async (req, res) => {
   if (req.body.password !== user.password){
     return res.sendStatus(403)
   }
-  res.send({token: "secretstring"})
+  user.token = uuidv4()
+  await user.save()
+  res.send({token: user.token})
 })
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   const authHeader = req.headers['authorization']
-  if (authHeader === "secretstring") {
+  const user = await User.findOne({token: authHeader})
+  if (user) {
     next()
   } else{
     res.sendStatus(403)
