@@ -28,11 +28,7 @@ app.use(cors());
 app.use(morgan('combined'));
 
 app.post('/auth', async (req, res) => {
-  console.log(req.body);
   const user = await User.findOne({username : req.body.username})
-  const userF = await User.find();
-  console.log(userF);
-  console.log(user);
   if (!user) {
     return res.sendStatus(401)
   }
