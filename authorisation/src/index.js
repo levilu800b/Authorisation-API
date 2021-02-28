@@ -10,7 +10,7 @@ const { v4: uuidv4 } = require('uuid');
 const mongoose = require('mongoose');
 const { Ad } = require('../models/ad');
 const { User } = require('../models/user');
-mongoose.connect('mongodb+srv://levilu800b:1234@authorisation.z9lqd.mongodb.net/Authorisation?retryWrites=true&w=majority');
+mongoose.connect('mongodb+srv://levilu800b:1413@authorisation.cv4er.mongodb.net/Authorisation?retryWrites=true&w=majority');
 
 // defining the Express app
 const app = express();
@@ -28,7 +28,9 @@ app.use(cors());
 app.use(morgan('combined'));
 
 app.post('/auth', async (req, res) => {
-  const user = await User.findOne({username : req.body.username})
+  console.log(req.body);
+  const user = await User.findOne({username : req.body.username}) 
+  console.log(user);
   if (!user) {
     return res.sendStatus(401)
   }
